@@ -20,22 +20,23 @@ public static function execute(){
     require('Db/DataBase.php');
     self::$pdo = DataBase::getInstance();
 
-    self::$sql = self::$pdo->prepare("SELECT `link`, `small_link` FROM `links` WHERE $small_link");
+    self::$sql = self::$pdo->prepare("SELECT `link`, `small_link`, `status` FROM `links` WHERE $small_link");
     self::$sql->execute();
     $return = self::$sql->fetch();
 
-    if ($return[1] = $small_link)
+    if ($return[1] = $small_link && $return[0] != null  && $return[3] = 0)
     {
       $click = App::clickRegister($return["small_link"]);
       if ($click === true) {
         header("Location: http://$return[0]");
         die();
       }else{
-        die('erro');
+        include('error/500.php');
+        die();
       }
 
     }else{
-      echo "string";
+      include('error/500.php');
       die();
     }
 
